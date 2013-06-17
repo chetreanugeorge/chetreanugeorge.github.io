@@ -6,11 +6,10 @@
  *
  * @author Javier Jimenez Villar <javi@tapquo.com> || @soyjavi
  */
-@import url("http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700");
 /* -------------------------- THEME -------------------------- */
 body {
   background-color: #222;
-  font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-weight: 400;
   font-size: 13px;
   line-height: 1.3em;
@@ -24,7 +23,7 @@ a.theme {
 .theme:active,
 li.theme:active,
 a.theme:active {
-  background-color: #0093d5;
+  background-color: #bfbfbf;
 }
 [data-control="pull"] {
   color: #666;
@@ -33,18 +32,12 @@ a.theme:active {
   text-shadow: 0 1px 0 #fff;
 }
 /* -------------------------- LAYOUT COLORS -------------------------- */
-section {
-  background-color: #222;
-}
 section > header {
-  background-color: #0093d5;
-  -webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.25), inset 0 1px 0 #03b1ff, inset 0 -1px 0 #007db5;
-  -moz-box-shadow: 0 1px 3px rgba(0,0,0,0.25), inset 0 1px 0 #03b1ff, inset 0 -1px 0 #007db5;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.25), inset 0 1px 0 #03b1ff, inset 0 -1px 0 #007db5;
+  background-color: #bfbfbf;
+  -webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.25), inset 0 1px 0 #c9c9c9, inset 0 -1px 0 #a2a2a2;
+  -moz-box-shadow: 0 1px 3px rgba(0,0,0,0.25), inset 0 1px 0 #c9c9c9, inset 0 -1px 0 #a2a2a2;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.25), inset 0 1px 0 #c9c9c9, inset 0 -1px 0 #a2a2a2;
   color: #fff;
-  -webkit-border-radius: 4px 4px 0 0;
-  -moz-border-radius: 4px 4px 0 0;
-  border-radius: 4px 4px 0 0;
 }
 section > footer,
 section nav.groupbar {
@@ -59,7 +52,7 @@ section > [data-control="pull"] {
 }
 section > article.splash,
 section > [data-control="pull"].splash {
-  background: #222;
+  background: #bfbfbf;
   color: #fff;
 }
 section.aside {
@@ -86,19 +79,26 @@ aside > header {
   box-shadow: 0 1px 3px rgba(0,0,0,0.25), inset 0 1px 0 #222, inset 0 -1px 0 #141414;
 }
 /* -------------------------- NAVIGATION -------------------------- */
-section > header > nav a:not(.button) {
-  color: #00608a;
-  -webkit-text-shadow: 0 1px 0 #20baff;
-  -moz-text-shadow: 0 1px 0 #20baff;
-  text-shadow: 0 1px 0 #20baff;
+section > header > nav a {
+  color: #fff;
 }
-section > header > nav a:not(.button):active {
-  color: #004a6b;
+section > header > nav:not(.right) a {
+  -webkit-box-shadow: 1px 0 0 #c9c9c9, inset -1px 0 0 #a2a2a2;
+  -moz-box-shadow: 1px 0 0 #c9c9c9, inset -1px 0 0 #a2a2a2;
+  box-shadow: 1px 0 0 #c9c9c9, inset -1px 0 0 #a2a2a2;
+}
+section > header > nav.right a {
+  -webkit-box-shadow: -1px 0 0 #c9c9c9, inset 1px 0 0 #a2a2a2;
+  -moz-box-shadow: -1px 0 0 #c9c9c9, inset 1px 0 0 #a2a2a2;
+  box-shadow: -1px 0 0 #c9c9c9, inset 1px 0 0 #a2a2a2;
+}
+section > header > nav a:active {
+  background: #a2a2a2;
 }
 section > nav.groupbar > a.active {
-  -webkit-box-shadow: inset 0 -3px 0 #0093d5;
-  -moz-box-shadow: inset 0 -3px 0 #0093d5;
-  box-shadow: inset 0 -3px 0 #0093d5;
+  -webkit-box-shadow: inset 0 -3px 0 #bfbfbf;
+  -moz-box-shadow: inset 0 -3px 0 #bfbfbf;
+  box-shadow: inset 0 -3px 0 #bfbfbf;
 }
 section > footer > nav > a,
 nav.groupbar > a {
@@ -116,15 +116,28 @@ section > footer > nav > a {
 section > footer > nav > a.active {
   color: #fff;
   background-color: #1d1d1d;
-  -webkit-box-shadow: inset 0 3px 0 #0093d5;
-  -moz-box-shadow: inset 0 3px 0 #0093d5;
-  box-shadow: inset 0 3px 0 #0093d5;
+  -webkit-box-shadow: inset 0 3px 0 #bfbfbf;
+  -moz-box-shadow: inset 0 3px 0 #bfbfbf;
+  box-shadow: inset 0 3px 0 #bfbfbf;
 }
-aside nav a {
-  color: #4e4e4e;
+aside nav a.active .icon {
+  color: #fff;
+}
+aside nav a:not(.active) .icon {
+  color: #888;
+}
+aside nav:not(.right) a {
+  -webkit-box-shadow: 1px 0 0 #222, inset -1px 0 0 #141414;
+  -moz-box-shadow: 1px 0 0 #222, inset -1px 0 0 #141414;
+  box-shadow: 1px 0 0 #222, inset -1px 0 0 #141414;
+}
+aside nav.right a {
+  -webkit-box-shadow: -1px 0 0 #222, inset 1px 0 0 #141414;
+  -moz-box-shadow: -1px 0 0 #222, inset 1px 0 0 #141414;
+  box-shadow: -1px 0 0 #222, inset 1px 0 0 #141414;
 }
 aside nav a:active {
-  color: #919191;
+  background: #141414;
 }
 /* -------------------------- LISTS -------------------------- */
 section .list li {
@@ -166,7 +179,7 @@ section .list li.theme,
 section .list li a.theme,
 section .list li.active,
 section .list li a.active {
-  background: #03b1ff;
+  background: #c9c9c9;
 }
 section .list li.light,
 section .list li a.light {
@@ -219,17 +232,13 @@ aside .list li:not(:first-child) {
 aside .list li:not(:last-child) {
   border-bottom: solid 1px #141414;
 }
-aside .list li.active,
-aside .list li:active {
-  background: #0093d5;
+aside .list li.active {
+  background: #bfbfbf;
   border-color: transparent;
 }
 aside .list li.active strong,
-aside .list li:active strong,
 aside .list li.active small,
-aside .list li:active small,
-aside .list li.active .icon,
-aside .list li:active .icon {
+aside .list li.active .icon {
   color: #fff;
 }
 aside .list li strong {
@@ -248,7 +257,7 @@ aside .list li .icon {
   font-weight: 700 !important;
 }
 .tag:not(.icon).count {
-  background-color: #0093d5;
+  background-color: #bfbfbf;
 }
 .tag:not(.icon) header .count {
   background-color: THEME-dark !important;
@@ -278,7 +287,7 @@ footer .tag:not(.icon) {
   -webkit-box-shadow: none !important;
   -moz-box-shadow: none !important;
   box-shadow: none !important;
-  color: #007db5 !important;
+  color: #a2a2a2 !important;
   -webkit-border-radius: 0px !important;
   -moz-border-radius: 0px !important;
   border-radius: 0px !important;
@@ -294,22 +303,8 @@ footer .tag:not(.icon) {
   color: #fff;
 }
 /* -------------------------- BUTTONS -------------------------- */
-header .button,
-header button {
-  background-color: #007db5;
-  -webkit-box-shadow: 0 1px 0 #03b1ff, inset 0 1px 0 #00608a;
-  -moz-box-shadow: 0 1px 0 #03b1ff, inset 0 1px 0 #00608a;
-  box-shadow: 0 1px 0 #03b1ff, inset 0 1px 0 #00608a;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  border-radius: 4px;
-}
-header .button:active,
-header button:active {
-  background-color: #005880;
-}
-article .button,
-article button {
+a.button,
+button {
   -webkit-border-radius: FORM-border-radius;
   -moz-border-radius: FORM-border-radius;
   border-radius: FORM-border-radius;
@@ -322,39 +317,39 @@ article button {
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.2);
   border: solid 1px rgba(0,0,0,0.1);
 }
-article .button:active,
-article button:active {
+a.button:active,
+button:active {
   -webkit-box-shadow: inset 0 0 128px rgba(0,0,0,0.25);
   -moz-box-shadow: inset 0 0 128px rgba(0,0,0,0.25);
   box-shadow: inset 0 0 128px rgba(0,0,0,0.25);
   border-color: none;
 }
-article .button.secondary,
-article button.secondary {
+a.button.secondary,
+button.secondary {
   color: #666 !important;
 }
-article .button[disabled],
-article button[disabled] {
+a.button[disabled],
+button[disabled] {
   background-color: #000;
 }
-article button,
-article .button,
-article .tag:not(.icon) {
-  background-color: #007db5;
+button,
+.button,
+.tag:not(.icon) {
+  background-color: #a2a2a2;
 }
-article button.secondary,
-article .button.secondary,
-article .tag:not(.icon).secondary {
+button.secondary,
+.button.secondary,
+.tag:not(.icon).secondary {
   background-color: #bfbfbf;
 }
-article button.accept,
-article .button.accept,
-article .tag:not(.icon).accept {
+button.accept,
+.button.accept,
+.tag:not(.icon).accept {
   background-color: #3fb58e;
 }
-article button.cancel,
-article .button.cancel,
-article .tag:not(.icon).cancel {
+button.cancel,
+.button.cancel,
+.tag:not(.icon).cancel {
   background-color: #ee6557;
 }
 /* -------------------------- BUTTONS -------------------------- */
@@ -483,7 +478,7 @@ form select:focus,
 form textarea:focus,
 .form textarea:focus {
   background: #fafafa;
-  border-color: #0093d5;
+  border-color: #bfbfbf;
   color: rgba(0,0,0,0.75);
 }
 form input[type="text"][disabled],
@@ -533,7 +528,7 @@ form input[type=range]:not(.checkbox),
 }
 form input[type=range]:not(.checkbox):active,
 .form input[type=range]:not(.checkbox):active {
-  background-color: #03b1ff;
+  background-color: #c9c9c9;
 }
 form input[type=range].checkbox,
 .form input[type=range].checkbox {
@@ -543,13 +538,14 @@ form input[type=range].checkbox,
 form input[type=range].checkbox.active,
 .form input[type=range].checkbox.active {
   color: #fff;
-  background-color: #03b1ff;
+  background-color: #c9c9c9;
 }
 form input[type=range]::-webkit-slider-thumb,
 .form input[type=range]::-webkit-slider-thumb {
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
   border-radius: 2px;
+  background: #eee;
   background-color: #e7eae2;
   border: solid 1px #d0d4c6;
 }
@@ -563,5 +559,5 @@ form .progress .bar,
 }
 form .progress .bar .value,
 .form .progress .bar .value {
-  background-color: #03b1ff;
+  background-color: #c9c9c9;
 }
