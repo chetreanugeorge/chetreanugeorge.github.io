@@ -1,0 +1,19 @@
+body, section, section > article, section > [data-control="pull"] { background: none }
+
+.autoHeight { width: 100%; height: auto; }
+.block {margin: 0 auto; display: block;}
+
+
+#userIcon img { width: 56% }
+section > header > nav a:not(.button) { color: #fff }
+
+#popup-login {display:none;}
+
+#wrapper-login {padding:2em;}
+#wrapper-login img.block:nth-child(1) {margin-bottom:20px;}
+#wrapper-login img { max-width: 195px }
+
+#wrapper-welcome { padding: 1em; font-size: 1em; }
+#wrapper-welcome img { padding-bottom: 0.5em; width: 50%;  }
+
+.ARmessage { border-radius: 2em; border: solid 1px #6d6d6d; background-color: rgba(255,255,255,0.5); color: black; text-align: center; position: absolute; width: 50%; height: 10%; left: 25%; top: 45%; }
