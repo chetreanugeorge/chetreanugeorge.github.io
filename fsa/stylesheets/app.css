@@ -1,5 +1,7 @@
 body, section, section > article, section > [data-control="pull"] { background: none }
 
+html, body {width:480px;}
+
 .autoHeight { width: 100%; height: auto; }
 .block {margin: 0 auto; display: block;}
 

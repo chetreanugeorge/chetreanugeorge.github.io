@@ -1,117 +1,122 @@
-	var trackerDataSetPath = "app/targetcollections.wtc"; 
-		var tracker = new AR.Tracker(trackerDataSetPath);  
-		var circle = new AR.Circle(0.25, {
-			onClick : function() {
-				circle.radius *= 2;
+var World = {
+	tracker: null,
+	loaded: false,
+	productsInfo: null,
+	selectedProduct: null,
+	productsOverlays: [],
+	productsTrackable: [],
+
+	init: function initFn() {
+		if (typeof AR === 'undefined') { return;}
+		
+		// Initialize Tracker
+		this.tracker = new AR.Tracker(CONFIG.appURL+"/FSA_local.zip", {
+			onLoaded:  function() { //this.worldLoaded
+				log('tracker loaded', true);
 			},
-			horizontalAnchor : AR.CONST.HORIZONTAL_ANCHOR.LEFT,
-			opacity : 0.5
-		})
-		var trackable2DObject = new AR.Trackable2DObject(tracker, "copyoffinalmedium8qv",{ drawables: { cam: [circle] }}); 
+			onError:function() { 
+				log('tracker not loaded!', true);
+			}, 
+			onDisabled : function(){
+			log('tracker disabled!!!', true);
+}
+		});
+		
+		//alert('all ok so far '+ this.tracker);
 
-alert('all ok so far', tracker, circle, trackable2DObject);
-/*var World = {
-    productsInfo: null,
-    rotating: false,
-    selectedPlanet: null,
-
-    init: function initFn() {
-        var tracker = new AR.Tracker("app/targetcollections.wtc");
-
-        var sizeFactor = 0.01;
-        var distanceFactor = 0.01;
-
-
-        this.productsInfo = [{
-            name: "Sun",
-            distance: 0,
-            realSize: 109.2 * sizeFactor,
-            description: "The Sun is the star at the center of the Solar System. It is almost perfectly spherical and consists of hot plasma interwoven with magnetic fields.",
-            mass: "2&nbsp;10<sup>30</sup>&nbsp;kg",
-            diameter: "1,392,684&nbsp;km"
+		this.productsInfo = [{
+				id: "p1",
+				name: "Product 1",
+				description: "This is product 1",
+				ingredients: [],
+				price: 3
         },
-
-        
+			{
+				id: "p2",
+				name: "Product 2",
+				description: "This is product 2",
+				ingredients: [],
+				price: 4
+        },
+			{
+				id: "p3",
+				name: "Product 3",
+				description: "This is product 3",
+				ingredients: [],
+				price: 5
+        }
 		];
 
-        var products = [];
+		var productsOverlays = [];
 
-        for (var i = 0; i < this.productsInfo.length; i++) {
-            var info = this.productsInfo[i];
+		for (var i = 0; i < this.productsInfo.length; i++) {
+			var info = this.productsInfo[i];
 
-            info.size = Math.log(info.realSize * 1000) * 0.01;
-            if (i > 0) {
-                info.distance = this.productsInfo[i - 1].distance + this.productsInfo[i - 1].size + info.size + 0.05;
-            }
+			//create a Style, red fill color, green outline
+			var myStyle = {
+				fillColor: '#FF0000',
+				outlineSize: 2,
+				outlineColor: '#00FF00'
+			};
 
-            products[i] = new AR.Model(info.modelFile, {
-                scale: {
-                    x: info.size,
-                    y: info.size,
-                    z: info.size
-                },
-                translate: {
-                    x: this.sunLocation.x + info.distance,
-                    y: this.sunLocation.y,
-                    z: this.sunLocation.z
-                }
-            });
+			//applying style options on creation of circle
+			var overlay = new AR.Circle(0.5, {
+				style: myStyle
+			});
 
-            info.planetModel = products[i];
-            info.selectedAnimation = this.createSelectedAnimation(info);
-            info.select = this.selectPlanet;
+			var trackable = new AR.Trackable2DObject(this.tracker, info.id, {
+				drawables: {
+					cam: overlay
+				}
+			});
 
-            products[i].onClick = this.planetClicked(info);
-        }
+			this.productsOverlays[i] = overlay;
 
-        var backdropImg = new AR.ImageResource("assets/backdrop.png");
-        var backdrop = [new AR.ImageDrawable(backdropImg, 2)];
+			this.productsTrackable[i] = trackable;
 
-        var overlay = new AR.Trackable2DObject(tracker, "solarsystem", {
-            drawables: {
-                cam: backdrop.concat(products)
-            }
-        });
+			info.productOverlay = overlay;
+			info.productTrackable = trackable;
 
-        AR.context.onScreenClick = this.screenClick;
-    },
+			info.select = this.selectproduct;
 
-    selectPlanet: function selectPlanetFn(select) {
-        if (select) {
-            if (World.selectedPlanet !== null) {
-                World.selectedPlanet.select(false);
-            }
-            World.selectedPlanet = this;
-            this.selectedAnimation.start(-1);
-        } else {
-            this.selectedAnimation.stop();
-            this.planetModel.scale = {
-                x: this.size,
-                y: this.size,
-                z: this.size
-            };
-        }
-    },
+			overlay.onClick = this.productClicked(info);
+		}
+		
+		AR.context.onScreenClick = this.screenClick;
+	},
 
-    planetClicked: function planetClickedFn(planet) {
-        return function() {
-            planet.select(true);
-            document.getElementById("info").setAttribute("class", "info");
-            document.getElementById("name").innerHTML = planet.name;
-            document.getElementById("mass").innerHTML = planet.mass;
-            document.getElementById("diameter").innerHTML = planet.diameter;
-            document.getElementById("info").setAttribute("class", "infoVisible");
-            return true;
-        };
-    },
+	selectproduct: function selectproductFn(select) {
+		if (select) {
+			// clear previously selected one
+			if (World.selectedProduct !== null) {
+				World.selectedProduct.select(false);
+			}
+			World.selectedProduct = this;
+		}
+		else {
 
-    screenClick: function onScreenClickFn() {
-        if (World.selectedPlanet !== null) {
-            World.selectedPlanet.select(false);
-        }
+		}
+	},
 
-        document.getElementById("info").setAttribute("class", "info");
-    }
+	productClicked: function productClickedFn(product) {
+		return function () {
+			product.select(true);
+			alert(product.name);
+			return true;
+		};
+	},
+
+	screenClick: function onScreenClickFn() {
+		if (World.selectedProduct !== null) {
+			World.selectedProduct.select(false);
+		}
+
+		alert('clicked screen');
+	},
+	
+	worldLoaded: function worldLoadedFn() {
+		alert('tracker loaded');
+	}
 };
 
-World.init();*/
+World.init();

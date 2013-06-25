@@ -1,6 +1,5 @@
 var UserHandler = new function () {
 		this.isLogged = false;
-		this.redirectUrl = window.location.href;
 		this.userInfo = null;
 		this.userInfoProvider = null;
 		this.logoutHTML = null;
@@ -11,56 +10,55 @@ var UserHandler = new function () {
 			/*if (window.location.href.indexOf("error_reason")>=0) {
 			$$(document.body).append("<p>Authorization denied!</p>");
 		}*/
-			/*if (!this.isLogged) {
-				this.callbackTT();
+		
+			// check if user logged in by Twitter and was redirected back
+			if (!this.isLogged) {
+				this.callbackTT(false);
 			}
 			
 			if (!this.isLogged) {
-				this.callbackFB();
-			}*/
-
-			if (!this.isLogged) {
-				console.log('show login');
-				Lungo.Notification.html($$("#popup-login").html())
-				//ev();
+				FB.getLoginStatus(function (response) {
+					if (response.status == "connected") {
+						UserHandler.callbackFB(response);
+					}
+					else {
+						if (!this.isLogged) {
+							log("show login");
+							Lungo.Notification.html($$("#popup-login").html())
+							//ev();
+						}
+					}
+				});
 			}
 		}
 
 		// login with Facebook
 		this.loginFB = function () {
-			// init the FB JS SDK
-			FB.init({
-				appId: this.appIdFB,
-				status: true,
-				cookie: true,
-				oauth: true
-			});
-			console.log("login FB", FB);
 			FB.getLoginStatus(this.callbackFB);
 		}
 
 		// login with Twitter
 		this.loginTT = function () {
-			console.log("login tt");
-			this.callbackTT();
+			this.callbackTT(true);
 		}
 
 		this.confirmLogout = function () {
-			console.log(UserHandler.logoutHTML);
+			log(UserHandler.logoutHTML);
 			Lungo.Notification.confirm({
-				icon: 'user',
-				title: 'You are logged in as',
+				icon: "user",
+				title: "You are logged in as",
 				description: UserHandler.logoutHTML,
 				accept: {
-					icon: 'checkmark',
-					label: 'Log out',
+					icon: "checkmark",
+					label: "Log out",
 					callback: function () {
 						UserHandler.logout();
+						return false;
 					}
 				},
 				cancel: {
-					icon: 'close',
-					label: 'Go Back',
+					icon: "close",
+					label: "Go Back",
 					callback: function () {
 					}
 				}
@@ -68,11 +66,22 @@ var UserHandler = new function () {
 		}
 
 		this.logout = function () {
-			this.isLogged = false;
+			/*this.isLogged = false;
 			this.userInfo = null;
 			this.userInfoProvider = null;
-			this.logoutHTML = null;
-			location.reload();
+			this.logoutHTML = null;*/
+			
+			//log('logout '+this.userInfoProvider+ ' '+UserHandler.userInfoProvider);
+			if (this.userInfoProvider=="fb") {
+				//log('fb logout');
+				FB.logout(function(response) {
+					//log('fb logout completed');
+					location.reload();
+				});
+			}
+			else {
+				openURL("./actions/twitter?q=logout");
+			}
 		}
 
 		// Handles the response from getting the user's login status.
@@ -81,14 +90,13 @@ var UserHandler = new function () {
 		// then redirect to the auth dialog.
 		this.callbackFB = function (response) {
 			if (response.status != "connected") {
-				top.location.href = "https://www.facebook.com/dialog/oauth?client_id=" + appId + "&redirect_uri=" + encodeURIComponent(redirectUrl) + "&scope=email";
+				openURL("https://www.facebook.com/dialog/oauth?client_id=" + UserHandler.appIdFB + "&redirect_uri=" + encodeURIComponent(CONFIG.appURL) + "&scope=email");
 			}
 			else {
 				FB.api("/me", function (response) {
-					this.isLogged = true;
-					this.userInfoProvider = "fb";
+					UserHandler.isLogged = true;
+					UserHandler.userInfoProvider = "fb";
 					UserHandler.userInfo = response;
-					console.log(UserHandler.userInfo);
 
 					$$("#username").html(UserHandler.userInfo.first_name);
 					$$("#userIcon").html("<img src='http://graph.facebook.com/" + UserHandler.userInfo.username + "/picture'/> ");
@@ -101,33 +109,32 @@ var UserHandler = new function () {
 
 		}
 
-		this.callbackTT = function () {
+		this.callbackTT = function (startLogin) {
 			var cookieTT = readCookie("twitterData");
 			if (cookieTT) {
-				this.isLogged = true;
-				this.userInfoProvider = "tt";
-				this.userInfo = JSON.parse(decodeURIComponent((cookieTT + '').replace(/\+/g, '%20')));
-				console.log(this.userInfo);
+				UserHandler.isLogged = true;
+				UserHandler.userInfoProvider = "tt";
+				UserHandler.userInfo = JSON.parse(decodeURIComponent((cookieTT + "").replace(/\+/g, "%20")));
 
-				$$("#username").html(this.userInfo.name);
-				$$("#userIcon").html("<img src='" + this.userInfo.profile_image_url_https + "'/> ");
+				$$("#username").html(UserHandler.userInfo.name);
+				$$("#userIcon").html("<img src='" + UserHandler.userInfo.profile_image_url_https + "'/> ");
 
-				this.logoutHTML = "<div id='wrapper-welcome'><img src='" + this.userInfo.profile_image_url_https + "' class='block'/> <br/>" + this.userInfo.name + "</div>";
+				this.logoutHTML = "<div id='wrapper-welcome'><img src='" + UserHandler.userInfo.profile_image_url_https + "' class='block'/> <br/>" + UserHandler.userInfo.name + "</div>";
 
 				Lungo.Notification.confirm({
-					icon: 'user',
-					title: "Welcome, " + this.userInfo.name,
+					icon: "user",
+					title: "Welcome, " + UserHandler.userInfo.name,
 					description: "<div id='wrapper-welcome'><img src='" + UserHandler.userInfo.profile_image_url_https + "' class='block'/> <br/></div>",
 					accept: {
-						icon: 'checkmark',
-						label: 'Proceed',
+						icon: "checkmark",
+						label: "Proceed",
 						callback: function () {
 							//Lungo.Notification.hide();
 						}
 					},
 					cancel: {
-						icon: 'close',
-						label: 'Log Out',
+						icon: "close",
+						label: "Log Out",
 						callback: function () {
 							UserHandler.logout();
 						}
@@ -135,7 +142,9 @@ var UserHandler = new function () {
 				});
 			}
 			else {
-				window.location = './actions/twitter';
+				if (startLogin) {
+					openURL("./actions/twitter?q=login");
+				}
 			}
 		}
 	}

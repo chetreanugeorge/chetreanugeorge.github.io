@@ -1,54 +1,55 @@
 <!doctype html>
 <html>
 <head>
-  <meta charset="utf-8">
-  <!--<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">-->
-  <title>Food Shopping Assistant</title>
-  <meta name="description" content="">
-  <meta name="author" content="George-Leonard Chetreanu">
-  <meta name="HandheldFriendly" content="True">
-  <meta name="viewport" content="target-densitydpi=device-dpi, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=320" />
-  <!-- width = 540, user-scalable = 0 -->
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="format-detection" content="telephone=no">
-  <meta http-equiv="cleartype" content="on">
+<meta charset="utf-8">
+<!--<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">-->
+<title>Food Shopping Assistant</title>
+<meta name="description" content="">
+<meta name="author" content="George-Leonard Chetreanu">
+<meta name="HandheldFriendly" content="True">
+<meta name="viewport" content="target-densitydpi=device-dpi, user-scalable=no, width=480" />
+<!-- initial-scale=1.0, maximum-scale=1.0,  width = 540, user-scalable = 0 -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no">
+<meta http-equiv="cleartype" content="on">
 
-  <!-- Main Stylesheet -->
-  <link rel="stylesheet" href="components/lungo/lungo.css">
-  <link rel="stylesheet" href="components/lungo/lungo.icon.css">
-  <link rel="stylesheet" href="components/lungo/lungo.icon.brand.css">
-  <link rel="stylesheet" href="components/lungo/lungo.css">
-  <link rel="stylesheet" href="components/lungo/theme.lungo.css" id="theme-stylesheet">
+<!-- Main Stylesheet -->
+<link rel="stylesheet" href="components/lungo/lungo.css">
+<link rel="stylesheet" href="components/lungo/lungo.icon.css">
+<link rel="stylesheet" href="components/lungo/lungo.icon.brand.css">
+<link rel="stylesheet" href="components/lungo/lungo.css">
+<link rel="stylesheet" href="components/lungo/theme.lungo.css" id="theme-stylesheet">
 
-  <!-- App Stylesheet -->
-  <link rel="stylesheet" href="stylesheets/app.css">
+<!-- App Stylesheet -->
+<link rel="stylesheet" href="stylesheets/app.css">
 
-  <!-- Include the ARchitect library -->
-  <script src="architect://architect.js"></script> -->
-  <!-- Include the ARchitect Desktop Engine for testing on a desktop browser<script type="text/javascript" src="../ade.js"></script>-->
+<!-- Include the ARchitect library 
+<script src="architect://architect.js"></script>-->
+<!-- Include the ARchitect Desktop Engine for testing on a desktop browser
+<script type="text/javascript" src="components/wikitude/ade.js"></script>-->
 </head>
-<body class="app">
-  <section id="main" data-transition="">
-    <header data-title="Food Shopping Assistant" class="extended">
-      <nav> <a href="#left" data-router="aside" data-icon="menu"></a> </nav>
-      <nav class="right"> <a href="#" id="username"></a> <a data-action="logout" data-icon="user" class="button" id="userIcon"></a> </nav>
-    </header>
-    <article id="main-article" class="active"> </article>
-  </section>
-  <div id="popup-login">
-    <div id="wrapper-login"> <img src='images/login-fb.png' class='autoHeight block btn-login' id='btnLogin-fb' data-action='loginFB'/> <img src='images/login-tt.png' class='autoHeight block btn-login' id='btnLogin-tt' data-action='loginTT'/></div>
-  </div>
+<body class="app"><!--  onLoad="javascript:AR.logger.activateDebugMode();" -->
+<section id="main" data-transition="">
+  <header data-title="Food Shopping Assistant" class="extended">
+    <nav> <a href="#left" data-router="aside" data-icon="menu"></a> </nav>
+    <nav class="right"> <a href="#" id="username"></a> <a data-action="logout" data-icon="user" class="button" id="userIcon"></a> </nav>
+  </header>
+  <article id="main-article" class="active"> </article>
+</section>
+<div id="popup-login">
+  <div id="wrapper-login"> <img src='images/login-fb.png' class='autoHeight block btn-login' id='btnLogin-fb' data-action='loginFB' /> <img src='images/login-tt.png' class='autoHeight block btn-login' id='btnLogin-tt' data-action='loginTT'/></div>
+</div>
 
-    <!-- Message element in the center of the HUD that is clickable. 
+<!-- Message element in the center of the HUD that is clickable. 
 	<div id="messageElement" class="ARmessage" onClick="messageClicked();"> Hello World! </div>--> 
 
-  <!-- Lungo dependencies --> 
-  <script src="components/quojs/quo.js"></script> 
-  <script src="components/lungo/lungo.js"></script> 
+<!-- Lungo dependencies --> 
+<script src="components/quojs/quo.js"></script> 
+<script src="components/lungo/lungo.js"></script> 
 
-  <!-- Lungo init --> 
-  <script>
+<!-- Lungo init --> 
+<script>
   Lungo.init({
    name: 'Food Shopping Assistant',
    version: '2.1',
@@ -56,8 +57,8 @@
  });
   </script> 
 
-  <!-- Facebook init --> 
-  <script>
+<!-- Facebook init --> 
+<script>
 // Load the Facebook SDK asynchronously
 (function(d, s, id){
  var js, fjs = d.getElementsByTagName(s)[0];
@@ -73,15 +74,15 @@ if (JSON==undefined) {
    var js, fjs = d.getElementsByTagName(s)[0];
    if (d.getElementById(id)) {return;}
    js = d.createElement(s); js.id = id;
-   js.src = "actions/json2.min.js";
+   js.src = "components/json2.min.js";
    fjs.parentNode.insertBefore(js, fjs);
  }(document, 'script', 'json2lib'));
 }
 </script> 
-<script src="actions/utils.js"></script> 
+<script src="actions/common.js"></script> 
+<script src="actions/ARHandler.js"></script> 
+<script src="actions/RecommendationGenerator.js"></script> 
 <script src="actions/UserHandler.js"></script> 
-<script src="actions/ARHandler.js"></script>
-<!--<script src="actions/RecommendationGenerator.js"></script>--> 
 <script src="actions/AppEngine.js"></script>
 </body>
 </html>
