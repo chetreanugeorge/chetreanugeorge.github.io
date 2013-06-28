@@ -5,17 +5,21 @@ var UserHandler = new function () {
 		this.logoutHTML = null;
 
 		this.appIdFB = 169299926577053;
-
-		this.init = function () {
-			/*if (window.location.href.indexOf("error_reason")>=0) {
-			$$(document.body).append("<p>Authorization denied!</p>");
-		}*/
 		
+		this.callback = null;
+
+		this.init = function (callback) {
+			this.callback = callback;
+			
+			/*if (window.location.href.indexOf("error_reason")>=0) {
+				$$(document.body).append("<p>Authorization denied!</p>");
+			}*/
+
 			// check if user logged in by Twitter and was redirected back
 			if (!this.isLogged) {
 				this.callbackTT(false);
 			}
-			
+
 			if (!this.isLogged) {
 				FB.getLoginStatus(function (response) {
 					if (response.status == "connected") {
@@ -23,9 +27,7 @@ var UserHandler = new function () {
 					}
 					else {
 						if (!this.isLogged) {
-							log("show login");
 							Lungo.Notification.html($$("#popup-login").html())
-							//ev();
 						}
 					}
 				});
@@ -59,23 +61,14 @@ var UserHandler = new function () {
 				cancel: {
 					icon: "close",
 					label: "Go Back",
-					callback: function () {
-					}
+					callback: function () {}
 				}
 			});
 		}
 
 		this.logout = function () {
-			/*this.isLogged = false;
-			this.userInfo = null;
-			this.userInfoProvider = null;
-			this.logoutHTML = null;*/
-			
-			//log('logout '+this.userInfoProvider+ ' '+UserHandler.userInfoProvider);
-			if (this.userInfoProvider=="fb") {
-				//log('fb logout');
-				FB.logout(function(response) {
-					//log('fb logout completed');
+			if (this.userInfoProvider == "fb") {
+				FB.logout(function (response) {
 					location.reload();
 				});
 			}
@@ -103,7 +96,30 @@ var UserHandler = new function () {
 
 					UserHandler.logoutHTML = "<div id='wrapper-welcome'><img src='http://graph.facebook.com/" + UserHandler.userInfo.username + "/picture?type=large' class='block'/> <br/>" + UserHandler.userInfo.first_name + "</div>";
 
-					Lungo.Notification.html("<div id='wrapper-welcome'><img src='http://graph.facebook.com/" + UserHandler.userInfo.username + "/picture?type=large' class='block'/> <br/> Welcome, " + UserHandler.userInfo.first_name + "</div>", "proceed", 5);
+					//Lungo.Notification.hide();
+					//setTimeout(function() {
+
+					Lungo.Notification.confirm({
+						icon: "user",
+						title: "Welcome, " + UserHandler.userInfo.first_name,
+						description: "<div id='wrapper-welcome'><img src='http://graph.facebook.com/" + UserHandler.userInfo.username + "/picture?type=large' class='block'/> <br/></div>",
+						accept: {
+							icon: "checkmark",
+							label: "Proceed",
+							callback: function () {
+								if (UserHandler.callback) {UserHandler.callback();}
+							}
+						},
+						cancel: {
+							icon: "close",
+							label: "Log Out",
+							callback: function () {
+								UserHandler.logout();
+							}
+						}
+					});
+					//}, 500);
+					
 				});
 			}
 
@@ -119,7 +135,7 @@ var UserHandler = new function () {
 				$$("#username").html(UserHandler.userInfo.name);
 				$$("#userIcon").html("<img src='" + UserHandler.userInfo.profile_image_url_https + "'/> ");
 
-				this.logoutHTML = "<div id='wrapper-welcome'><img src='" + UserHandler.userInfo.profile_image_url_https + "' class='block'/> <br/>" + UserHandler.userInfo.name + "</div>";
+				UserHandler.logoutHTML = "<div id='wrapper-welcome'><img src='" + UserHandler.userInfo.profile_image_url_https + "' class='block'/> <br/>" + UserHandler.userInfo.name + "</div>";
 
 				Lungo.Notification.confirm({
 					icon: "user",
@@ -129,7 +145,7 @@ var UserHandler = new function () {
 						icon: "checkmark",
 						label: "Proceed",
 						callback: function () {
-							//Lungo.Notification.hide();
+							if (UserHandler.callback) {UserHandler.callback();}
 						}
 					},
 					cancel: {

@@ -36,7 +36,7 @@ function URLDecode(encodedString) {
 }
 
 function log(msg, doAlert) {
-	if (typeof AR !== 'undefined') AR.logger.debug(msg);
+	if (typeof AR !== 'undefined' && typeof AR.logger!=='undefined') AR.logger.debug(msg);
 	if (typeof console !== 'undefined') console.log(msg)
 	if (doAlert) alert(msg);
 }

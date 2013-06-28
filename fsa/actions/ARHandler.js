@@ -1,28 +1,35 @@
-var World = {
+var ARHandler = {
 	tracker: null,
 	loaded: false,
 	productsInfo: null,
 	selectedProduct: null,
 	productsOverlays: [],
 	productsTrackable: [],
+	
+	callback:null,
+	
+	init: function initFn(callback) {
+		this.callback = callback;
+		
+		if (typeof AR === 'undefined') {
+			return;
+		}
 
-	init: function initFn() {
-		if (typeof AR === 'undefined') { return;}
-		
 		// Initialize Tracker
-		this.tracker = new AR.Tracker(CONFIG.appURL+"/FSA_local.zip", {
-			onLoaded:  function() { //this.worldLoaded
+		this.tracker = new AR.Tracker(CONFIG.appURL + "/FSA_local.zip", {
+			onLoaded: function () {
 				log('tracker loaded', true);
+				if (ARHandler.callback) {
+					ARHandler.callback()
+				}
 			},
-			onError:function() { 
+			onError: function () {
 				log('tracker not loaded!', true);
-			}, 
-			onDisabled : function(){
-			log('tracker disabled!!!', true);
-}
+			},
+			onDisabled: function () {
+				log('tracker disabled!!!', true);
+			}
 		});
-		
-		//alert('all ok so far '+ this.tracker);
 
 		this.productsInfo = [{
 				id: "p1",
@@ -44,19 +51,16 @@ var World = {
 				description: "This is product 3",
 				ingredients: [],
 				price: 5
-        }
-		];
-
-		var productsOverlays = [];
+        }];
 
 		for (var i = 0; i < this.productsInfo.length; i++) {
 			var info = this.productsInfo[i];
 
 			//create a Style, red fill color, green outline
 			var myStyle = {
-				fillColor: '#FF0000',
-				outlineSize: 2,
-				outlineColor: '#00FF00'
+				fillColor: '#FFFFFF',
+				outlineSize: 5,
+				outlineColor: '#FF0000'
 			};
 
 			//applying style options on creation of circle
@@ -64,59 +68,89 @@ var World = {
 				style: myStyle
 			});
 
+			var htmlDrawable2 = new AR.HtmlDrawable({
+				uri: "https://www.google.ro/"
+			}, 1, {
+				scale: 1,
+				updateRate: AR.HtmlDrawable.UPDATE_RATE.STATIC,
+				zOrder: 4
+			})
+
+			var htmlDrawable3 = new AR.HtmlDrawable({
+				uri: "https://www.google.ro/" //"http://students.info.uaic.ro/~george.chetreanu/fsa/app/sections/productDetails.html#"+info.id
+			}, 1, {
+				scale: 1,
+				updateRate: AR.HtmlDrawable.UPDATE_RATE.STATIC
+				//zOrder:3
+			})
+
+			//create a new label and pass some setup parameters
+			var label = new AR.Label(info.name, 0.25, {
+				opacity: 0.75,
+				style: {
+					backgroundColor: "#4b75c2",
+					textColor: "#ffffff"
+				} //,
+				//zOrder:2
+			});
+
+			var imgReset = new AR.ImageResource("images/btn-details.png");
+			var buttonReset = new AR.ImageDrawable(imgReset, 0.25, {
+				offsetX: 0.5,
+				offsetY: 0.5 //,
+				//zOrder:1
+			});
+
 			var trackable = new AR.Trackable2DObject(this.tracker, info.id, {
 				drawables: {
-					cam: overlay
+					cam: [label, buttonReset]
+				},
+				onEnterFieldOfVision: function () {
+					//log('now visible', true);
+				},
+				onExitFieldOfVision: function () {
+					//log('now gone', true);
 				}
 			});
 
-			this.productsOverlays[i] = overlay;
-
-			this.productsTrackable[i] = trackable;
-
-			info.productOverlay = overlay;
-			info.productTrackable = trackable;
-
 			info.select = this.selectproduct;
 
-			overlay.onClick = this.productClicked(info);
+			buttonReset.onClick = this.btnClicked(trackable);
+			label.onClick = this.productClicked(info);
 		}
-		
-		AR.context.onScreenClick = this.screenClick;
+
+		/*AR.context.onScreenClick = this.screenClick;*/
 	},
 
-	selectproduct: function selectproductFn(select) {
-		if (select) {
-			// clear previously selected one
-			if (World.selectedProduct !== null) {
-				World.selectedProduct.select(false);
-			}
-			World.selectedProduct = this;
-		}
-		else {
-
+	btnClicked: function btnClickedFn(t) {
+		return function () {
+			t.enabled = false;
+			log('btnClickedFn', true);
+			log(t, true);
+			return true;
 		}
 	},
 
 	productClicked: function productClickedFn(product) {
 		return function () {
 			product.select(true);
-			alert(product.name);
+			log(product.name, true);
+			log(AppEngine, true);
+			AppEngine.viewProduct();
 			return true;
 		};
 	},
 
-	screenClick: function onScreenClickFn() {
-		if (World.selectedProduct !== null) {
-			World.selectedProduct.select(false);
+	selectproduct: function selectproductFn(select) {
+		if (select) {
+			// clear previously selected one
+			if (ARHandler.selectedProduct !== null) {
+				ARHandler.selectedProduct.select(false);
+			}
+			ARHandler.selectedProduct = this;
 		}
+		else {
 
-		alert('clicked screen');
-	},
-	
-	worldLoaded: function worldLoadedFn() {
-		alert('tracker loaded');
+		}
 	}
 };
-
-World.init();

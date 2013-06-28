@@ -1,3 +1,5 @@
-function RecommendationGenerator() {
+var RecommendationGenerator =  {
+	init: function initFn() {
 	
+	}
 }
