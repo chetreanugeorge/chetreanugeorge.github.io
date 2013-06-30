@@ -3,12 +3,12 @@
 <head>
 <meta charset="utf-8">
 <!--<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">-->
-<title>Food Shopping Assistant</title>
+<title>AR Food Shopping Assistant</title>
 <meta name="description" content="">
 <meta name="author" content="George-Leonard Chetreanu">
 <meta name="HandheldFriendly" content="True">
-<meta name="viewport" content="target-densitydpi=device-dpi, user-scalable=no, width=320" />
-<!-- initial-scale=1.0, maximum-scale=1.0,  width = 540, user-scalable = 0 -->
+<meta name="viewport" content="target-densitydpi=device-dpi, user-scalable=yes, width=device-width, initial-scale=1.5" />
+<!-- maximum-scale=1.0 -->
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 <meta name="format-detection" content="telephone=no">
@@ -18,73 +18,168 @@
 <link rel="stylesheet" href="components/lungo/lungo.css">
 <link rel="stylesheet" href="components/lungo/lungo.icon.css">
 <link rel="stylesheet" href="components/lungo/lungo.icon.brand.css">
-<link rel="stylesheet" href="components/lungo/lungo.css">
 <link rel="stylesheet" href="components/lungo/theme.lungo.css" id="theme-stylesheet">
 
 <!-- App Stylesheet -->
-<link rel="stylesheet" href="stylesheets/app.css">
+<link rel="stylesheet" href="app/stylesheets/app.css">
 
 <!-- Include the ARchitect library -->
 <script src="architect://architect.js"></script>
-<!-- Include the ARchitect Desktop Engine for testing on a desktop browser 
-<script type="text/javascript" src="components/wikitude/ade.js"></script>-->
+<!-- Include the ARchitect Desktop Engine for testing on a desktop browser -->
+<script type="text/javascript" src="components/wikitude/ade.js"></script>
 </head>
 <body class="app">
-<!--  onLoad="javascript:AR.logger.activateDebugMode();"  -->
+<!--  onLoad="javascript:AR.logger.activateDebugMode();"  --> 
+
+<!-- home screen -->
 <section id="main">
-  <header data-title="Starting..." class="extended">
+  <header data-title="Starting..." class="extended touchable">
     <nav> <a href="#left" data-router="aside" data-icon="menu" data-async="app/asides/left.html"></a> </nav>
-    <nav class="right"> <a href="#" id="username"></a> <a data-action="logout" data-icon="user" class="button" id="userIcon"></a> </nav>
+    <nav class="right"> <a data-action="logout" data-icon="user" class="button" id="userIcon"></a> </nav>
   </header>
+  <!-- see&click-through default screen -->
   <article id="default" class="active off"> </article>
+  <!-- product details screen -->
   <article id="product" class="list">
-    <div class="details clear"> <img src="http://placehold.it/350x150"/>
-      <ul>
-        <li class="theme"> <strong>Product name</strong> <small></small> </li>
-        <li data-icon="cart"> <a href="#"> <strong>Price</strong> <small>RON 30</small> </a> </li>
-        <li data-icon="grid"> <a href="#"> <strong>Ingredients</strong> <small>class .grid</small> </a> </li>
-      </ul>
-    </div>
-    <div class="notes">
-      <ul>
-        <li class="anchor">Notes</li>
-        <li class="accept"> <strong>None</strong> <small>This product looks fine!</small> </li>
-      </ul>
-    </div>
-    <div class="recommended">
-      <ul>
-        <li class="anchor">You may want to check out these as well:</li>
-        <li class="secondary"> <strong>No suggestions for now</strong> <small>Maybe later!</small> </li>
-      </ul>
+    <div class="container opaque">
+      <div class="details">
+        <ul>
+          <li class="theme">
+            <div class="right" data-icon="cart"><strong id="productPrice"></strong> RON</div>
+            <strong id="productName"></strong> <small id="productDescription"></small> </li>
+        </ul>
+      </div>
+      <div>
+        <ul>
+          <li class="anchor">Contains</li>
+          <li id="productIngredients"></li>
+        </ul>
+      </div>
+      <div class="listSection" id="productNotes">
+        <ul>
+          <li class="anchor">Notes</li>
+        </ul>
+      </div>
+      <div class="listSection" id="productRecommendations">
+        <ul>
+          <li class="anchor">You may want to check out these as well:</li>
+          <li class="secondary"> <strong>No suggestions for now</strong> <small>Maybe later!</small> </li>
+        </ul>
+      </div>
+      <div class="list" style="clear:both;overflow:auto">
+        <div class="five columns left"> <div class="anchor button" data-icon="thumbs-up" data-action="bought">I bought this!</div> </div>
+        <div class="five columns right"> <a href="#default" data-router="article" class="anchor button secondary" data-icon="right">continue</a> </div>
+      </div>
     </div>
   </article>
-  <footer class="inactive">
-    <nav> <a href="#layout-art1" data-router="article" data-icon="home" class="active"></a> <a href="#layout-art2" data-router="article" data-icon="inbox" data-count="80"></a> <a href="#layout-art3" data-router="article" data-icon="compass"></a> <a href="#layout-art4" data-router="article" data-icon="settings"></a> </nav>
-  </footer>
 </section>
-<section id="carousel" data-transition="slide" class="off">
+
+<!-- all identified products -->
+<section id="carousel" data-transition="slide" class="">
   <header>
     <nav> <a href="#back" data-router="section" data-icon="home"></a> </nav>
     <div class="centered title">Photo Nº<span>1</span></div>
     <nav class="right"> <a href="#" data-action="carousel" data-direction="left" data-icon="left" class="button"></a> <a href="#" data-action="carousel" data-direction="right" data-icon="right" class="button"></a> </nav>
   </header>
   <article id="carousel-article" class="active block" data-control="carousel">
-    <div>
-      <div align="center"> <img src="http://lorempixel.com/320/418/food/" /><br>
-        test </div>
-      <div align="center"> <img src="http://lorempixel.com/320/418/sports/"> </div>
-      <div align="center"> <img src="http://lorempixel.com/320/418/people/"> </div>
-      <div align="center"> <img src="http://lorempixel.com/320/418/abstract/"> </div>
-      <div align="center"> <img src="http://lorempixel.com/320/418/city/"> </div>
-      <div align="center"> <img src="http://lorempixel.com/320/418/transport/"> </div>
-      <div align="center"> <img src="http://lorempixel.com/320/418/nature/"> </div>
-      <div align="center"> <img src="http://lorempixel.com/320/418/fashion/"> </div>
-      <div align="center"> <img src="http://lorempixel.com/320/418/technics/"> </div>
+    <div id="allProducts">
     </div>
   </article>
 </section>
+
+<!-- shoopping basket -->
+<section id="shoppingBasket" data-transition="slide" class="fullHeightFullOpaque">
+  <header data-title="Shopping Basket">
+    <nav> <a href="#back" data-router="section" data-icon="home"></a> </nav>
+  </header>
+  <article class="active list scroll">
+    <ul>
+      <li class="anchor">Items <span class="tag theme count" id="boughtTotalItems"></span></li>
+    </ul>
+  </article>
+</section>
+
+<!-- personal info -->
+<section id="personalInfo" data-transition="slide" class="fullHeightFullOpaque">
+  <header data-title="Personal Information">
+    <nav> <a href="#back" data-router="section" data-icon="home"></a> </nav>
+  </header>
+  <article class="active">
+    <div class="form margined">
+      <label>Please specify your eating style:</label>
+      <div>&nbsp;</div>
+      <label class="select">
+        <select class="custom">
+          <option value="none">Regular</option>
+          <option value="Vegetarian">Vegetarian</option>
+          <option value="Ovo-Vegetarian">Ovo-Vegetarian</option>
+          <option value="Lacto-Vegetarian">Lacto-Vegetarian</option>
+          <option value="Vegan">Vegan</option>
+        </select>
+      </label>
+      <div>&nbsp;</div>
+      <div class="list">
+        <div>Please specify any allergies:</div>
+        <ul>
+          <li>
+            <label>
+              <input name="allergies" type="checkbox" id="a1" value="peanut">
+              Peanuts </label>
+          </li>
+          <li>
+            <label>
+              <input name="allergies" type="checkbox" id="a1" value="fish">
+              Fish </label>
+          </li>
+          <li>
+            <label>
+              <input name="allergies" type="checkbox" id="a1" value="shellfish">
+              Shellfish </label>
+          </li>
+          <li>
+            <label>
+              <input name="allergies" type="checkbox" id="a1" value="egg">
+              Eggs </label>
+          </li>
+          <li>
+            <label>
+              <input name="allergies" type="checkbox" id="a1" value="milk">
+              Milk </label>
+          </li>
+          <li>
+            <label>
+              <input name="allergies" type="checkbox" id="a1" value="soy">
+              Soy </label>
+          </li>
+          <li>
+            <label>
+              <input name="allergies" type="checkbox" id="a1" value="corn">
+              Corn </label>
+          </li>
+          <li>
+            <label>
+              <input name="allergies" type="checkbox" id="a1" value="wheat">
+              Wheat </label>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </article>
+</section>
+
+<!-- preferences -->
+<section id="preferences" data-transition="slide" class="fullHeightFullOpaque">
+  <header data-title="Preferences">
+    <nav> <a href="#back" data-router="section" data-icon="home"></a> </nav>
+  </header>
+  <article class="active">
+    <div class="form">preferences </div>
+  </article>
+</section>
+
+<!-- login popup -->
 <div id="popup-login">
-  <div id="wrapper-login"> <img src='images/login-fb.png' class='autoHeight block btn-login' id='btnLogin-fb' data-action='loginFB' /> <img src='images/login-tt.png' class='autoHeight block btn-login' id='btnLogin-tt' data-action='loginTT'/></div>
+  <div id="wrapper-login"> <img src='app/images/login-fb.png' class='autoHeight centeredBlock btn-login' id='btnLogin-fb' data-action='loginFB' /> <img src='app/images/login-tt.png' class='autoHeight centeredBlock btn-login' id='btnLogin-tt' data-action='loginTT'/></div>
 </div>
 
 <!-- Lungo dependencies --> 
@@ -142,10 +237,10 @@
   	AppEngine.init();
   };
 </script> 
-<script src="actions/common.js"></script> 
-<script src="actions/ARHandler.js"></script> 
-<script src="actions/RecommendationGenerator.js"></script> 
-<script src="actions/UserHandler.js"></script> 
-<script src="actions/AppEngine.js"></script>
+<script src="app/actions/common.js"></script> 
+<script src="app/actions/ARHandler.js"></script> 
+<script src="app/actions/RecommendationGenerator.js"></script> 
+<script src="app/actions/UserHandler.js"></script> 
+<script src="app/actions/AppEngine.js"></script>
 </body>
 </html>
