@@ -4,14 +4,12 @@ var UserHandler = new function () {
 		
 		// for external use
 		this.boughtProducts = [];
-		this.userInfo =  function () {
-			// make call to db with this.profileInfo.id and this.profileInfoProvider
-			return this.users[0];
-		}
+		this.userInfo = null;
+		
 		
 		// for internal use
-		this.profileInfo = null;
 		this.isLogged = false;
+		this.profileInfo = null;
 		this.profileInfoProvider = null;
 		this.logoutHTML = null;
 
@@ -19,8 +17,6 @@ var UserHandler = new function () {
 		
 		this.callback = null;
 		
-		
-
 		this.init = function (callback) {
 			this.callback = callback;
 
@@ -168,24 +164,56 @@ var UserHandler = new function () {
 				}
 			}
 		}
-
+		
+		this.getUserInfo = function () {
+			// make call to db with this.profileInfo.id and this.profileInfoProvider
+			
+			
+			this.userInfo = Lungo.Core.findByProperty(this.users, 'id', Number(this.profileInfo.id))
+			//this.userInfo = this.users[0];
+		}
+			
 		this.boughtProduct = function (product) {
 			// save to db
 			//
-			
+			//console.log('boughtProduct', product);
 			this.boughtProducts.push(product);
+		}
+		
+		this.recommendedProduct = function(product, isRecommended) {
+			// save to db
+			//
+			
+			//console.log('product', product);
+			//console.log('isRecommended', isRecommended);
+			//console.log('this.userInfo.id', this.userInfo.id);
+			
+			if (isRecommended) {
+				if (product.recommendedBy == null) {
+					product.recommendedBy = [];
+				}
+				product.recommendedBy.push(this.userInfo.id);
+			}
+			else {
+				if (product.notRecommendedBy == null) {
+					product.notRecommendedBy = [];
+				}
+				product.notRecommendedBy.push(this.userInfo.id);
+			}
+			//console.log('product.recommendedBy' + product.recommendedBy);
+			//console.log('product.notRecommendedBy',product.notRecommendedBy);
 		}
 	}
 	
 	UserHandler.users = [
 		{
-			"id":553313237,
+			"id": 553313237,
 			"idProvider":"fb",
 			// eating preferences
-			"Fasting": true,
+			//"Fasting": true,
 			// dietary restrictions
-			"dietType": "Ovo-Vegetarian", // none, Vegetarian, Ovo-Vegetarian, Lacto-Vegetarian, Vegan
+			"dietType": "regular", // regular, Vegetarian, Ovo-Vegetarian, Lacto-Vegetarian, Vegan
 			// allergies
-			"Allergies": [0,0,0,0,0,0,0,0]
+			"allergies": [1,0,0,0,0,0,0,0]
 		}
 	]

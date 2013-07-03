@@ -3,16 +3,18 @@
 /* lungo overrides */
 body, section, section > article, section > [data-control="pull"] { background: none }
 .list li.anchor .tag {display:inline-block;}
-
+.list li small {overflow:inherit !important; white-space:inherit !important;}
+form fieldset label, .form fieldset label {width:inherit !important;}
+form label, .form label {color:#666;}
+form input[type=range].checkbox:after, .form input[type=range].checkbox:after {top:auto !important}
+.list li.arrow::after {top:60% !important;}
 
 /* custom styles */
 .autoHeight { width: 100%; height: auto; }
 .centeredBlock { margin: 0 auto; display: block; }
+.redBg {background-color:#ee6557; color:#fff; font-weight:bold;}
 
 section#main { height: auto !important }
-/*section, article { pointer-events: none }
-.touchable { pointer-events: auto !important }
-.off { z-index: 1 !important; display: none !important; }*/
 
 #userIcon img { height:100%; display:block; }
 
@@ -24,15 +26,10 @@ section#main { height: auto !important }
 #wrapper-login img { max-width: 195px }
 #wrapper-welcome { padding: 1em; font-size: 1em; }
 #wrapper-welcome img { padding-bottom: 0.5em; width: 50%; }
-#product .container { margin: 5%; padding: 10%; color: #fff; }
-#product .listSection {max-height:128px; overflow-y:auto;}
-#productIngredients {max-height:256px; overflow-y:auto;}
+#product .container { margin: 5%; padding: 5%; color: #fff; }
+#productIngredients, #product .listSection {max-height:128px; overflow-y:auto;}
 footer.inactive { display: none }
 
 .ARmessage { border-radius: 2em; border: solid 1px #6d6d6d; background-color: rgba(255,255,255,0.5); color: black; text-align: center; position: absolute; width: 50%; height: 10%; left: 25%; top: 45%; }
 
-
 .fullHeightFullOpaque {height:100%; background-color:#fff;}
-
-
-/*#product {display:block !important; visibility:visible !important}*/

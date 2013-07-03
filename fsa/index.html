@@ -2,13 +2,11 @@
 <html>
 <head>
 <meta charset="utf-8">
-<!--<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">-->
 <title>AR Food Shopping Assistant</title>
 <meta name="description" content="">
 <meta name="author" content="George-Leonard Chetreanu">
 <meta name="HandheldFriendly" content="True">
 <meta name="viewport" content="target-densitydpi=device-dpi, user-scalable=yes, width=device-width, initial-scale=1.5" />
-<!-- maximum-scale=1.0 -->
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 <meta name="format-detection" content="telephone=no">
@@ -25,16 +23,15 @@
 
 <!-- Include the ARchitect library -->
 <script src="architect://architect.js"></script>
-<!-- Include the ARchitect Desktop Engine for testing on a desktop browser -->
-<script type="text/javascript" src="components/wikitude/ade.js"></script>
+<!-- Include the ARchitect Desktop Engine for testing on a desktop browser 
+<script type="text/javascript" src="components/wikitude/ade.js"></script> -->
 </head>
-<body class="app">
-<!--  onLoad="javascript:AR.logger.activateDebugMode();"  --> 
+<body class="app"> <!-- onLoad="javascript:AR.logger.activateDebugMode();" AR.logger.debug(msg); -->
 
 <!-- home screen -->
 <section id="main">
   <header data-title="Starting..." class="extended touchable">
-    <nav> <a href="#left" data-router="aside" data-icon="menu" data-async="app/asides/left.html"></a> </nav>
+    <nav> <a href="#menu" data-router="aside" data-icon="menu" data-async="app/asides/left.html"></a> </nav>
     <nav class="right"> <a data-action="logout" data-icon="user" class="button" id="userIcon"></a> </nav>
   </header>
   <!-- see&click-through default screen -->
@@ -42,48 +39,43 @@
   <!-- product details screen -->
   <article id="product" class="list">
     <div class="container opaque">
-      <div class="details">
-        <ul>
-          <li class="theme">
-            <div class="right" data-icon="cart"><strong id="productPrice"></strong> RON</div>
-            <strong id="productName"></strong> <small id="productDescription"></small> </li>
-        </ul>
-      </div>
-      <div>
-        <ul>
-          <li class="anchor">Contains</li>
-          <li id="productIngredients"></li>
-        </ul>
-      </div>
-      <div class="listSection" id="productNotes">
-        <ul>
-          <li class="anchor">Notes</li>
-        </ul>
-      </div>
+      <ul>
+        <li class="theme">
+          <div class="right" data-icon="cart"><strong id="productPrice"></strong> RON</div>
+          <strong id="productName"></strong> <small id="productDescription"></small> </li>
+        <li class="anchor">Contains</li>
+        <li id="productIngredients"></li>
+        <li class="anchor">Notes</li>
+      </ul>
+      <ul class="listSection" id="productNotes">
+      </ul>
+      <ul>
+          <li class="anchor">You may want to check out as well</li>
+          </ul>
       <div class="listSection" id="productRecommendations">
         <ul>
-          <li class="anchor">You may want to check out these as well:</li>
           <li class="secondary"> <strong>No suggestions for now</strong> <small>Maybe later!</small> </li>
         </ul>
       </div>
       <div class="list" style="clear:both;overflow:auto">
-        <div class="five columns left"> <div class="anchor button" data-icon="thumbs-up" data-action="bought">I bought this!</div> </div>
-        <div class="five columns right"> <a href="#default" data-router="article" class="anchor button secondary" data-icon="right">continue</a> </div>
+        <div class="five columns left">
+          <div class="anchor button" data-icon="thumbs-up" data-action="bought">I bought this!</div>
+        </div>
+        <div class="five columns right"> <a href="#default" data-router="article" class="anchor button secondary" data-icon="right" data-action="resumeRadar">continue</a> </div>
       </div>
     </div>
   </article>
 </section>
 
 <!-- all identified products -->
-<section id="carousel" data-transition="slide" class="">
+<section id="review" data-transition="slide" class="fullHeightFullOpaque">
   <header>
     <nav> <a href="#back" data-router="section" data-icon="home"></a> </nav>
-    <div class="centered title">Photo Nº<span>1</span></div>
-    <nav class="right"> <a href="#" data-action="carousel" data-direction="left" data-icon="left" class="button"></a> <a href="#" data-action="carousel" data-direction="right" data-icon="right" class="button"></a> </nav>
+    <div class="centered title">No products so far</div>
+    <nav class="right"> <a href="#" data-action="review" data-direction="left" data-icon="left" class="button"></a> <a href="#" data-action="review" data-direction="right" data-icon="right" class="button"></a> </nav>
   </header>
-  <article id="carousel-article" class="active block" data-control="carousel">
-    <div id="allProducts">
-    </div>
+  <article id="review-article" class="active block" data-control="review">
+    <div id="reviewList"> </div>
   </article>
 </section>
 
@@ -94,7 +86,7 @@
   </header>
   <article class="active list scroll">
     <ul>
-      <li class="anchor">Items <span class="tag theme count" id="boughtTotalItems"></span></li>
+      <li class="anchor">Items <span class="tag theme count" id="boughtTotalItems">0</span></li>
     </ul>
   </article>
 </section>
@@ -105,65 +97,67 @@
     <nav> <a href="#back" data-router="section" data-icon="home"></a> </nav>
   </header>
   <article class="active">
-    <div class="form margined">
-      <label>Please specify your eating style:</label>
-      <div>&nbsp;</div>
-      <label class="select">
-        <select class="custom">
-          <option value="none">Regular</option>
-          <option value="Vegetarian">Vegetarian</option>
-          <option value="Ovo-Vegetarian">Ovo-Vegetarian</option>
-          <option value="Lacto-Vegetarian">Lacto-Vegetarian</option>
-          <option value="Vegan">Vegan</option>
-        </select>
-      </label>
-      <div>&nbsp;</div>
-      <div class="list">
-        <div>Please specify any allergies:</div>
-        <ul>
-          <li>
-            <label>
-              <input name="allergies" type="checkbox" id="a1" value="peanut">
-              Peanuts </label>
-          </li>
-          <li>
-            <label>
-              <input name="allergies" type="checkbox" id="a1" value="fish">
-              Fish </label>
-          </li>
-          <li>
-            <label>
-              <input name="allergies" type="checkbox" id="a1" value="shellfish">
-              Shellfish </label>
-          </li>
-          <li>
-            <label>
-              <input name="allergies" type="checkbox" id="a1" value="egg">
-              Eggs </label>
-          </li>
-          <li>
-            <label>
-              <input name="allergies" type="checkbox" id="a1" value="milk">
-              Milk </label>
-          </li>
-          <li>
-            <label>
-              <input name="allergies" type="checkbox" id="a1" value="soy">
-              Soy </label>
-          </li>
-          <li>
-            <label>
-              <input name="allergies" type="checkbox" id="a1" value="corn">
-              Corn </label>
-          </li>
-          <li>
-            <label>
-              <input name="allergies" type="checkbox" id="a1" value="wheat">
-              Wheat </label>
-          </li>
-        </ul>
-      </div>
-    </div>
+    <form class="margined list">
+      <ul>
+        <li class="dark"> <strong> Please specify your eating style: </strong> </li>
+        <li>
+          <label class="select">
+            <select class="custom" id="dietType">
+              <option value="regular">Regular</option>
+              <option value="Vegetarian">Vegetarian</option>
+              <option value="Ovo-Vegetarian">Ovo-Vegetarian</option>
+              <option value="Lacto-Vegetarian">Lacto-Vegetarian</option>
+              <option value="Vegan">Vegan</option>
+            </select>
+            </strong> </label>
+        </li>
+        <li class="dark"> <strong> Please specify any allergies: </strong> </li>
+        <li>
+          <div class="scroll">
+            <fieldset>
+              <label>
+                <input name="allergies" type="checkbox" id="a1" value="walnut">
+                <strong>Walnuts</strong> </label>
+            </fieldset>
+            <fieldset>
+              <label>
+                <input name="allergies" type="checkbox" id="a2" value="fish">
+                <strong>Fish</strong> </label>
+            </fieldset>
+            <fieldset>
+              <label>
+                <input name="allergies" type="checkbox" id="a3" value="shellfish">
+                <strong>Shellfish</strong> </label>
+            </fieldset>
+            <fieldset>
+              <label>
+                <input name="allergies" type="checkbox" id="a4" value="egg">
+                <strong>Eggs</strong> </label>
+            </fieldset>
+            <fieldset>
+              <label>
+                <input name="allergies" type="checkbox" id="a5" value="milk">
+                <strong>Milk</strong> </label>
+            </fieldset>
+            <fieldset>
+              <label>
+                <input name="allergies" type="checkbox" id="a6" value="soy">
+                <strong>Soy</strong> </label>
+            </fieldset>
+            <fieldset>
+              <label>
+                <input name="allergies" type="checkbox" id="a7" value="corn">
+                <strong>Corn</strong> </label>
+            </fieldset>
+            <fieldset>
+              <label>
+                <input name="allergies" type="checkbox" id="a8" value="wheat">
+                <strong>Wheat</strong> </label>
+            </fieldset>
+          </div>
+        </li>
+      </ul>
+    </form>
   </article>
 </section>
 
@@ -173,13 +167,33 @@
     <nav> <a href="#back" data-router="section" data-icon="home"></a> </nav>
   </header>
   <article class="active">
-    <div class="form">preferences </div>
+    <form class="margined list">
+      <ul>
+        <!-- <li class="anchor"></li> -->
+        <li class=""> <strong>History</strong> <small>Keep track of identified products </small><br/>
+          <small>
+          <input type="range" min="0" max="1" class="checkbox active" value="1" id="historyON">
+          </small> </li>
+        <li class=""> <strong>Cart</strong> <small>Keep track of bought products </small><br/>
+          <small>
+          <input type="range" min="0" max="1" class="checkbox active" value="1" id="cartOn">
+          </small> </li>
+        <!--<li class=""> <strong>Augmented Reality </strong> <small>Show product name overlay </small><br/>
+          <small>
+          <input type="range" min="0" max="1" class="checkbox active" value="1" id="arProductNameOn">
+          </small><br/>
+          <small>Show "info" icon overlay </small><br/>
+          <small>
+          <input type="range" min="0" max="1" class="checkbox active" value="1" id="arInfoIconOn">
+          </small> </li>-->
+      </ul>
+    </form>
   </article>
 </section>
 
 <!-- login popup -->
 <div id="popup-login">
-  <div id="wrapper-login"> <img src='app/images/login-fb.png' class='autoHeight centeredBlock btn-login' id='btnLogin-fb' data-action='loginFB' /> <img src='app/images/login-tt.png' class='autoHeight centeredBlock btn-login' id='btnLogin-tt' data-action='loginTT'/></div>
+  <div id="wrapper-login"> <img src='app/images/login-fb.png' alt="Sign in with Facebook" class='autoHeight centeredBlock btn-login' id='btnLogin-fb' data-action='loginFB' /> <br/><br/><img src='app/images/login-tt.png' class='autoHeight centeredBlock btn-login' id='btnLogin-tt' data-action='loginTT' alt="Sign in with Twitter"/></div>
 </div>
 
 <!-- Lungo dependencies --> 
@@ -191,7 +205,7 @@
   Lungo.init({
   	name: 'Food Shopping Assistant',
   	version: '2.1',
-  	resources: [] //'app/asides/left.html'
+  	resources: []
   });
 
    //Show loading screen
